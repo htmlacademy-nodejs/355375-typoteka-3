@@ -67,11 +67,11 @@ const CATEGORIES = [
 
 const generateDatePublication = ()=>{
   const currentDate = Date.now();
-  const d = new Date();
-  const dateAgo = d.setMonth(d.getMonth() - 3);
-  const temp = new Date(getRandomInt(dateAgo, currentDate));
+  const date = new Date();
+  const startDate = date.setMonth(date.getMonth() - 3);
+  const temp = new Date(getRandomInt(startDate, currentDate));
   return temp.toISOString().replace(/T/g, ` `).replace(/\..+/, ``);
-}
+};
 
 const generatePublication = (count) => (
   Array(count).fill({}).map(() => ({
@@ -83,4 +83,24 @@ const generatePublication = (count) => (
   }))
 );
 
-console.log(generatePublication());
+module.exports = {
+  name: `--generate`,
+  run(args) {
+    const [count] = args;
+    const countPublication = Number.parseInt(count, 10) || DEFAULT_COUNT;
+    if (countPublication > MAX_COUNT) {
+      console.info(`Не больше ${MAX_COUNT} публикаций`);
+      process.exit(ExitCode.error);
+    }
+    const content = JSON.stringify(generatePublication(countPublication));
+
+    fs.writeFile(FILE_NAME, content, (err) => {
+      if (err) {
+        console.error(`Can't write data to file...`);
+        process.exit(ExitCode.error);
+      }
+      console.info(`Operation success. File created.`);
+      process.exit(ExitCode.success);
+    });
+  }
+};

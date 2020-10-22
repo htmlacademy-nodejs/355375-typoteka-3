@@ -2,8 +2,6 @@
 
 const {Cli} = require(`./cli`);
 
-console.log(Cli);
-
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
 const ExitCode = {
@@ -11,14 +9,13 @@ const ExitCode = {
   success: 0,
 };
 
-console.log(process.argv);
-
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
-if (userArguments.length === 0 || !Cli[userArguments]) {
+const [userCommand] = userArguments;
+if (userArguments.length === 0 || !Cli[userCommand]) {
   Cli[DEFAULT_COMMAND].run();
   process.exit(ExitCode.success);
 }
 
-Cli[userArguments].run(userArguments.slice(1));
+Cli[userCommand].run(userArguments.slice(1));
 
 
