@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 const DEFAULT_COUNT = 1;
@@ -86,7 +86,7 @@ const generatePublication = (count) => (
 
 module.exports = {
   name: `--generate`,
-  run(args) {
+  async run(args) {
     const [count] = args;
     const countPublication = Number.parseInt(count, 10) || DEFAULT_COUNT;
     if (countPublication > MAX_COUNT) {
@@ -95,13 +95,13 @@ module.exports = {
     }
     const content = JSON.stringify(generatePublication(countPublication));
 
-    fs.writeFile(FILE_NAME, content, (err) => {
-      if (err) {
-        console.error(chalk.red(`Can't write data to file...`));
-        process.exit(ExitCode.error);
-      }
+    try {
+      await fs.writeFile(FILE_NAME, content);
       console.info(chalk.green(`Operation success. File created.`));
       process.exit(ExitCode.success);
-    });
+    } catch (e) {
+      console.error(chalk.red(`Can't write data to file...`));
+      process.exit(ExitCode.error);
+    }
   }
 };
