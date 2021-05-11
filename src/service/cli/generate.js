@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
+const chalk = require(`chalk`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 const DEFAULT_COUNT = 1;
 const MAX_COUNT = 1000;
@@ -89,17 +90,17 @@ module.exports = {
     const [count] = args;
     const countPublication = Number.parseInt(count, 10) || DEFAULT_COUNT;
     if (countPublication > MAX_COUNT) {
-      console.info(`Не больше ${MAX_COUNT} публикаций`);
+      console.info(chalk.red(`Не больше ${MAX_COUNT} публикаций`));
       process.exit(ExitCode.error);
     }
     const content = JSON.stringify(generatePublication(countPublication));
 
     fs.writeFile(FILE_NAME, content, (err) => {
       if (err) {
-        console.error(`Can't write data to file...`);
+        console.error(chalk.red(`Can't write data to file...`));
         process.exit(ExitCode.error);
       }
-      console.info(`Operation success. File created.`);
+      console.info(chalk.green(`Operation success. File created.`));
       process.exit(ExitCode.success);
     });
   }
