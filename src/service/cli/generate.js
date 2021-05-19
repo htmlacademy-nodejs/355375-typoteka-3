@@ -31,6 +31,11 @@ const readContent = async (path)=>{
   }
 };
 
+const writeJsonFile = async (fileName, content)=>{
+  const json = JSON.stringify(content);
+  await writeFile(fileName, json);
+};
+
 const generateDatePublication = ()=>{
   const currentDate = Date.now();
   const date = new Date();
@@ -61,10 +66,10 @@ module.exports = {
       console.info(chalk.red(`Не больше ${MAX_COUNT} публикаций`));
       process.exit(ExitCode.error);
     }
-    const content = JSON.stringify(generatePublication(countPublication, titles, categories, sentences));
+    const publications = generatePublication(countPublication, titles, categories, sentences);
 
     try {
-      await writeFile(FILE_NAME, content);
+      await writeJsonFile(FILE_NAME, publications);
       console.info(chalk.green(`Operation success. File created.`));
       process.exit(ExitCode.success);
     } catch (e) {
