@@ -27,7 +27,7 @@ const readContent = async (path)=>{
     return content.trim().split(`\n`);
   } catch (e) {
     console.error(chalk.red(e));
-    return [];
+    throw e;
   }
 };
 
@@ -57,18 +57,18 @@ const generatePublication = (count, titles, categories, sentences) => (
 module.exports = {
   name: `--generate`,
   async run(args) {
-    const titles = await readContent(FILE_TITLES_PATH);
-    const categories = await readContent(FILE_CATEGORIES_PATH);
-    const sentences = await readContent(FILE_SENTENCES_PATH);
-    const [count] = args;
-    const countPublication = Number.parseInt(count, 10) || DEFAULT_COUNT;
-    if (countPublication > MAX_COUNT) {
-      console.info(chalk.red(`Не больше ${MAX_COUNT} публикаций`));
-      process.exit(ExitCode.error);
-    }
-    const publications = generatePublication(countPublication, titles, categories, sentences);
-
     try {
+      const titles = await readContent(FILE_TITLES_PATH);
+      const categories = await readContent(FILE_CATEGORIES_PATH);
+      const sentences = await readContent(FILE_SENTENCES_PATH);
+      const [count] = args;
+      const countPublication = Number.parseInt(count, 10) || DEFAULT_COUNT;
+      if (countPublication > MAX_COUNT) {
+        console.info(chalk.red(`Не больше ${MAX_COUNT} публикаций`));
+        process.exit(ExitCode.error);
+      }
+      const publications = generatePublication(countPublication, titles, categories, sentences);
+
       await writeJsonFile(FILE_NAME, publications);
       console.info(chalk.green(`Operation success. File created.`));
       process.exit(ExitCode.success);
