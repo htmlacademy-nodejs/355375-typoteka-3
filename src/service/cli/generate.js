@@ -3,6 +3,8 @@
 const {writeFile, readFile} = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {getRandomInt, shuffle} = require(`../../utils`);
+const {ExitCode} = require(`../../constants`);
+
 const DEFAULT_COUNT = 1;
 const MAX_COUNT = 1000;
 
@@ -11,10 +13,6 @@ const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 
 const FILE_NAME = `mocks.json`;
-const ExitCode = {
-  error: 1,
-  success: 0,
-};
 
 const AnnounceRestrict = {
   min: 1,
@@ -23,7 +21,7 @@ const AnnounceRestrict = {
 
 const readContent = async (path)=>{
   try {
-    const content = await readFile(path, `utf8`);
+    const content = (await readFile(path, `utf8`)).trim();
     return content.trim().split(`\n`);
   } catch (e) {
     console.error(chalk.red(e));
