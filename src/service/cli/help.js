@@ -11,7 +11,8 @@ module.exports = {
         Команды:
         --version:            выводит номер версии
         --help:               печатает этот текст
-        --generate <count>    формирует файл mocks.json`;
+        --generate <count>    формирует файл mocks.json,
+        --server <port>       запускает сервер`;
 
     console.info(chalk.gray(text));
   }

@@ -1,13 +1,10 @@
 'use strict';
 
 const {Cli} = require(`./cli`);
+const {ExitCode} = require(`../constants`);
 
 const DEFAULT_COMMAND = `--help`;
 const USER_ARGV_INDEX = 2;
-const ExitCode = {
-  error: 1,
-  success: 0,
-};
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
 const [userCommand] = userArguments;
